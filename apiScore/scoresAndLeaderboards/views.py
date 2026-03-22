@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 
-
+from django.http import HttpResponse
 from django.http import JsonResponse
 from rest_framework import serializers
 from rest_framework.decorators import api_view
@@ -38,3 +38,15 @@ def postFunc(request):
     return JsonResponse(serializer.data, status=201)
 
 
+def leaderboard(request, gameID):
+    if request.method != 'GET':
+        return JsonResponse("Not allowed", status = 405)
+    limit_param = request.GET.get('limit', 10)
+    limit = int(limit_param)
+    TopScores = Score.objects.filter(gameID=gameID).order_by('-scoreValue').values('username', 'scoreValue')[:limit]
+    leaderboard = []
+    for index, entry in enumerate(TopScores):
+        entry['rank'] = index + 1
+        leaderboard.append(entry)
+    res = JsonResponse(leaderboard, safe=False)
+    return res

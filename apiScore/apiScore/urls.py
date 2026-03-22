@@ -20,5 +20,6 @@ from scoresAndLeaderboards import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('scoresAndLeaderboards/scoresPost', views.postFunc, name='sPost')
+    path('scoresAndLeaderboards/scoresPost', views.postFunc, name='sPost'),
+    path('scoresAndLeaderboards/leaderboards/<str:gameID>', views.leaderboard, name = 'leaderboard')
 ]
